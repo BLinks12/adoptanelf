@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Adopt an Elf - Elf1.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'MedievalSharp', cursive;
+            background: linear-gradient(to bottom, #1e2e1e, #0f1a0f),
+                        url('https://example.com/subtle-forest-pattern.png');
+            background-repeat: repeat;
+            background-size: cover;
+            background-blend-mode: multiply;
+            color: #e8d4a2;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .hero {
+            padding: 40px 20px;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            color: #c4a46c;
+            text-shadow: 3px 3px 5px #000;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+
+        .hero .links {
+            margin-top: 20px;
+        }
+
+        .hero a {
+            color: #c4a46c;
+            text-decoration: none;
+            font-size: 1.2em;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        .hero a[href="#how-it-works"]::before {
+            content: "🧝 ";
+        }
+        .hero a[href="#elf-lore"]::before {
+            content: "🧝 ";
+        }
+        .hero a[href="#bestiary"]::before {
+            content: "🧝 ";
+        }
+
+        .hero a:hover {
+            color: #d4af37;
+        }
+
+        .generator {
+            margin: 30px 0;
+            padding: 20px;
+            background: #2e3e2e;
+            border: 2px solid #c4a46c;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .generator input {
+            font-size: 1.2em;
+            padding: 10px;
+            width: 300px;
+            margin: 10px;
+            border-radius: 10px;
+            border: 1px solid #444;
+        }
+
+        .generator button {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            background: #c4a46c;
+            color: #1e1a1a;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .generator button:hover {
+            background: #d4af37;
+        }
+
+        .loading-container {
+            display: none;
+            margin: 20px auto;
+        }
+
+        .loading-text {
+            color: #c4a46c;
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #1e2e1e;
+            border-top: 5px solid #c4a46c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ghost-showcase {
+            margin: 50px 0;
+        }
+
+        .ghost-showcase h2 {
+            color: #c4a46c;
+        }
+
+        .ghost {
+            display: inline-block;
+            margin: 20px;
+            padding: 15px;
+            border: 2px solid #444;
+            border-radius: 10px;
+            background: #333;
+            color: #c4a46c;
+            text-align: left;
+            font-size: 1em;
+            white-space: pre;
+            overflow-x: auto;
+            position: relative;
+            width: 300px;
+        }
+
+        .ghost p {
+            margin: 5px 0;
+        }
+
+        .download-btn, .share-btn {
+            margin-top: 10px;
+            font-size: 1em;
+            padding: 8px 16px;
+            background: #c4a46c;
+            color: #1e1a1a;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: inline-block;
+            margin-right: 10px;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover, .share-btn:hover {
+            background: #d4af37;
+        }
+
+        .share-btn {
+            background: #1DA1F2; /* Twitter Blue */
+            color: #fff;
+        }
+
+        .share-btn:hover {
+            background: #40a9f3;
+        }
+
+        .info-section {
+            max-width: 800px;
+            margin: 50px auto;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .info-section h2 {
+            text-align: center;
+            color: #c4a46c;
+            margin-bottom: 20px;
+        }
+
+        #elf-lore h2::before {
+            content: "🧝 ";
+        }
+
+        .info-section h3 {
+            color: #c4a46c;
+            margin-top: 30px;
+        }
+
+        .info-section p {
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .info-section ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-section ol li::before {
+            content: "🧝 ";
+            margin-right: 5px;
+        }
+
+        .lore-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .lore-item {
+            background: #444;
+            padding: 15px;
+            border-radius: 10px;
+            color: #f0dbc3;
+        }
+
+        .lore-item h4 {
+            margin-top: 0;
+            color: #c4a46c;
+        }
+
+        .hint {
+            font-style: italic;
+            color: #d4af37;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #bestiary .bestiary-entry {
+            background: #444;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        #bestiary .bestiary-entry h4 {
+            margin: 5px 0;
+            color: #c4a46c;
+        }
+
+        footer {
+            padding: 20px 0;
+            background: #0f1a0f;
+            color: #888;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .ghost {
+                width: 90%;
+            }
+
+            .generator input {
+                width: 80%;
+            }
+
+            .lore-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Adopt an Elf</h1>
+        <p>Enter your Solana wallet address and an optional quest phrase to discover your elven companion!</p>
+        <div class="links">
+            <a href="#how-it-works">How It Works</a>
+            <a href="#elf-lore">Elf Lore & Myths</a>
+            <a href="#bestiary">Elven Bestiary</a>
+        </div>
+    </div>
+
+    <div class="generator">
+        <label for="wallet-address" style="display:none;">Wallet Address</label>
+        <input type="text" id="wallet-address" placeholder="Enter your Solana wallet address...">
+        <input type="text" id="quest-phrase" placeholder="Enter a quest phrase (optional)...">
+        <button id="generate-button">Summon My Elf</button>
+    </div>
+
+    <div class="loading-container" id="loading-container">
+        <div class="spinner"></div>
+        <p class="loading-text">Calling Upon the Ancient Woods...</p>
+    </div>
+
+    <div class="ghost-showcase" id="ghost-showcase">
+        <h2>Your Elven Companion</h2>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="info-section" id="how-it-works">
+        <h2>How It Works</h2>
+        <p>Each elf is uniquely determined by your wallet address and, if provided, a secret “quest phrase.” Here’s the process:</p>
+        <ol>
+            <li><strong>Wallet Address Input:</strong> Enter your Solana wallet address.</li>
+            <li><strong>Quest Phrase (Optional):</strong> Add a phrase to influence rare outcomes.</li>
+            <li><strong>Hashing Process:</strong> We transform these inputs into numbers, using them to assign your elf’s attributes.</li>
+            <li><strong>Deterministic Results:</strong> The same inputs yield the same elf, ensuring uniqueness and rarity.</li>
+        </ol>
+        <p>Try different addresses and quest phrases to discover new and rare elves!</p>
+    </div>
+
+    <!-- Elf Lore & Myths Section -->
+    <div class="info-section" id="elf-lore">
+        <h2>Elf Lore & Myths</h2>
+        <p>In ancient groves, moonlit glens, and mist-veiled valleys, elves live in harmony with leaf and bough. Each elf emerges from whispering winds and eternal roots, taking on gentle hues, subtle forms, and mystical auras as unique as the songs they carry.</p>
+
+        <p>Some elves sing softly under silver moonlight, others guard sacred groves, and some guide weary travelers under rustling leaves. Their personalities are as diverse as the forests they inhabit. Below are known elf lineages, each a melody in the great woodland chorus:</p>
+
+        <div class="lore-grid">
+            <div class="lore-item">
+                <h4>Whisper Glen Elf</h4>
+                <p>Soft-spoken, gentle keepers of hidden clearings, blending into mossy dells beneath ancient oaks.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Frost Grove Elf</h4>
+                <p>Serene spirits of wintry forests, drifting silently through snow-kissed pines and icy streams.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Storm Vale Elf</h4>
+                <p>Vibrant and dynamic, thriving under thunderheads, dancing where rain and wind entwine.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Mosswood Elf</h4>
+                <p>Rooted in old forests, nurturing life and spirit, whispering tales in emerald glades.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Umbral Hollow Elf</h4>
+                <p>Quiet guardians of shaded groves, moving in half-light, holding secrets in twilight silence.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Ethereal Elder Elf</h4>
+                <p>Wise and ancient, luminous under starlight. Philosophical keepers of forest lore and memory.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Crystal Spring Elf</h4>
+                <p>Reflective spirits of clear waters, curious and shimmering near streams and crystalline pools.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Dusk Bloom Elf</h4>
+                <p>Appearing at twilight’s bloom, graceful and elusive, weaving dreams in twilight gardens.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Moon Whisper Elf</h4>
+                <p>Bathed in moonlight, singing gentle lullabies. Mystical, guiding travelers by lunar glow.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Ashen Oak Elf</h4>
+                <p>Dwellers of old charred groves, resilient and loyal, reborn where ancient trees once stood.</p>
+            </div>
+        </div>
+
+        <h3>Rarity and Collectibility</h3>
+        <p>Among these elves are rare aura hues, special accessories, or unique seasonal songs. Some appear only under special “quest phrases” or certain numerical coincidences. Keep experimenting to discover legendary rarities!</p>
+    </div>
+
+    <p class="hint">Psst... Certain “quest phrases” whispered at the right time can unveil rare elves unseen by ordinary means!</p>
+
+    <!-- Bestiary Section -->
+    <div class="info-section" id="bestiary">
+        <h2>Your Elven Bestiary</h2>
+        <p>As you summon new elves, their lineages will be recorded here. Return often, try new addresses and phrases, and watch your bestiary grow!</p>
+        <div id="bestiary-entries"></div>
+    </div>
+
+    <footer>
+        © 2024 Adopt an Elf | Whispers of the Woodland
+    </footer>
+
+    <script>
+    (function() {
+        // DOM Elements
+        const walletInput = document.getElementById('wallet-address');
+        const questInput = document.getElementById('quest-phrase');
+        const generateButton = document.getElementById('generate-button');
+        const ghostShowcase = document.getElementById('ghost-showcase');
+        const loadingContainer = document.getElementById('loading-container');
+        const bestiaryEntries = document.getElementById('bestiary-entries');
+
+        // Elf Configuration
+        const ELF_TYPES = [
+            {
+                type: 'Whisper Glen Elf',
+                traits: ['Gentle', 'Elusive', 'Soft-Spoken'],
+                art: `
+   /|\\
+  ( . )
+   \\|/
+ [Whisp]
+                `
+            },
+            {
+                type: 'Frost Grove Elf',
+                traits: ['Serene', 'Calm', 'Tranquil'],
+                art: `
+   /|\\
+  ( o )
+   \\|/
+ [Frost]
+                `
+            },
+            {
+                type: 'Storm Vale Elf',
+                traits: ['Dynamic', 'Vibrant', 'Unpredictable'],
+                art: `
+   /|\\
+  ( O )
+   \\|/
+ [Storm]
+                `
+            },
+            {
+                type: 'Mosswood Elf',
+                traits: ['Nurturing', 'Earthy', 'Greenish'],
+                art: `
+   /|\\
+  ( ^ )
+   \\|/
+ [Moss]
+                `
+            },
+            {
+                type: 'Umbral Hollow Elf',
+                traits: ['Silent', 'Secretive', 'Shadowy'],
+                art: `
+   /|\\
+  ( - )
+   \\|/
+ [Umbral]
+                `
+            },
+            {
+                type: 'Ethereal Elder Elf',
+                traits: ['Wise', 'Ancient', 'Cosmic'],
+                art: `
+   /|\\
+  ( * )
+   \\|/
+ [Elder]
+                `
+            },
+            {
+                type: 'Crystal Spring Elf',
+                traits: ['Curious', 'Reflective', 'Shimmering'],
+                art: `
+   /|\\
+  ( o )
+   \\|/
+[Crystal]
+                `
+            },
+            {
+                type: 'Dusk Bloom Elf',
+                traits: ['Graceful', 'Nocturnal', 'Elusive'],
+                art: `
+   /|\\
+  ( . )
+   \\|/
+ [Dusk]
+                `
+            },
+            {
+                type: 'Moon Whisper Elf',
+                traits: ['Dreamy', 'Mystical', 'Lulling'],
+                art: `
+   /|\\
+  ( * )
+   \\|/
+ [Moon]
+                `
+            },
+            {
+                type: 'Ashen Oak Elf',
+                traits: ['Steadfast', 'Loyal', 'Resilient'],
+                art: `
+   /|\\
+  ( o )
+   \\|/
+ [Ashen]
+                `
+            }
+        ];
+
+        // Rare Elf
+        const RARE_ELF = {
+            type: 'Starfell Elf',
+            traits: ['Ethereal', 'Mysterious', 'Rare'],
+            art: `
+   /|\\
+  ( ☆ )
+   \\|/
+[Starfell]
+            `
+        };
+
+        const AURAS = ['Emerald-Green', 'Moonlit-Silver', 'Autumn-Red', 'Willow-Gold', 'Dewy-Blue', 'Rose-Quartz', 'Sapphire-Shine', 'Fey-Purple', 'Sunset-Orange', 'Mist-Grey'];
+        const ACCESSORIES = ['Leaf Crown', 'Crystal Blossom', 'Runic Amulet', 'Moon Pendant', 'Druidic Staff', 'Ancient Bow', 'Silver Flute', 'Gleaming Dagger', 'Oak Charm', 'Mossy Cape'];
+
+        function validateWalletAddress(address) {
+            const solanaAddressRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+            return solanaAddressRegex.test(address);
+        }
+
+        function hashAddress(address) {
+            let hash = 0;
+            for (let i = 0; i < address.length; i++) {
+                const char = address.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32-bit integer
+            }
+            return Math.abs(hash);
+        }
+
+        function generateElf(walletHash, questHash) {
+            const combinedHash = (walletHash + questHash * 13) % 10000;
+
+            let elf;
+            if (combinedHash % 777 === 0) {
+                elf = RARE_ELF;
+            } else {
+                const typeIndex = walletHash % ELF_TYPES.length;
+                elf = ELF_TYPES[typeIndex];
+            }
+
+            const auraIndex = (walletHash >> 2) % AURAS.length;
+            const accessoryIndex = (walletHash >> 4) % ACCESSORIES.length;
+            const graceLevel = (walletHash % 100) + 1;
+            const chosenTrait = elf.traits[walletHash % elf.traits.length];
+
+            return {
+                type: elf.type,
+                aura: AURAS[auraIndex],
+                accessory: ACCESSORIES[accessoryIndex],
+                trait: chosenTrait,
+                graceLevel: graceLevel,
+                asciiArt: elf.art
+            };
+        }
+
+        function showLoading() {
+            loadingContainer.style.display = 'block';
+            ghostShowcase.innerHTML = '<h2>Your Elven Companion</h2>';
+        }
+
+        function hideLoading() {
+            loadingContainer.style.display = 'none';
+        }
+
+        function displayElf(elf) {
+            const elfCard = document.createElement('div');
+            elfCard.className = 'ghost';
+            elfCard.innerHTML = `
+${elf.asciiArt}
+<p><strong>Lineage:</strong> ${elf.type}</p>
+<p><strong>Aura:</strong> ${elf.aura}</p>
+<p><strong>Trait:</strong> ${elf.trait}</p>
+<p><strong>Accessory:</strong> ${elf.accessory}</p>
+<p><strong>Grace Level:</strong> ${elf.graceLevel}/100</p>
+            `;
+
+            const downloadButton = document.createElement('button');
+            downloadButton.className = 'download-btn';
+            downloadButton.textContent = 'Download Your Elf';
+            downloadButton.addEventListener('click', () => downloadElf(elf));
+
+            const shareButton = document.createElement('button');
+            shareButton.className = 'share-btn';
+            shareButton.textContent = 'Share on X';
+            shareButton.addEventListener('click', () => shareOnX(elf));
+
+            elfCard.appendChild(downloadButton);
+            elfCard.appendChild(shareButton);
+            ghostShowcase.appendChild(elfCard);
+
+            addElfToBestiary(elf);
+        }
+
+        function downloadElf(elf) {
+            const elfDetails = `
+Elven Companion Details:
+------------------------
+Lineage: ${elf.type}
+Aura: ${elf.aura}
+Trait: ${elf.trait}
+Accessory: ${elf.accessory}
+Grace Level: ${elf.graceLevel}/100
+
+Ascii Art:
+${elf.asciiArt}
+            `;
+
+            const blob = new Blob([elfDetails], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${elf.type.replace(/\s+/g, '_')}_Elf.txt`;
+            link.click();
+        }
+
+        function shareOnX(elf) {
+            const elfDetails = `I just summoned an elven companion! 🧝✨
+
+Lineage: ${elf.type}
+Aura: ${elf.aura}
+Trait: ${elf.trait}
+Accessory: ${elf.accessory}
+Grace Level: ${elf.graceLevel}/100
+
+Discover your own at #AdoptAnElf #EnchantedWoods
+`;
+            const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(elfDetails)}`;
+            window.open(tweetUrl, '_blank');
+        }
+
+        function addElfToBestiary(elf) {
+            const bestiaryData = JSON.parse(localStorage.getItem('bestiary')) || [];
+            if (!bestiaryData.includes(elf.type)) {
+                bestiaryData.push(elf.type);
+                localStorage.setItem('bestiary', JSON.stringify(bestiaryData));
+                updateBestiaryDisplay(bestiaryData);
+            }
+        }
+
+        function updateBestiaryDisplay(bestiaryData) {
+            bestiaryEntries.innerHTML = '';
+            bestiaryData.forEach(type => {
+                const entry = document.createElement('div');
+                entry.className = 'bestiary-entry';
+                entry.innerHTML = `<h4>${type}</h4><p>This lineage has been encountered and recorded in your growing lore archive.</p>`;
+                bestiaryEntries.appendChild(entry);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const bestiaryData = JSON.parse(localStorage.getItem('bestiary')) || [];
+            updateBestiaryDisplay(bestiaryData);
+        });
+
+        generateButton.addEventListener('click', () => {
+            const walletAddress = walletInput.value.trim();
+            const questPhrase = questInput.value.trim();
+
+            if (!validateWalletAddress(walletAddress)) {
+                alert('Please enter a valid Solana wallet address!');
+                return;
+            }
+
+            showLoading();
+
+            setTimeout(() => {
+                const walletHash = hashAddress(walletAddress);
+                const questHash = hashAddress(questPhrase);
+                const elf = generateElf(walletHash, questHash);
+
+                hideLoading();
+                displayElf(elf);
+            }, 2000);
+        });
+    })();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Adopt an Elf - Elf1.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'MedievalSharp', cursive;
+            background: linear-gradient(to bottom, #1e2e1e, #0f1a0f),
+                        url('https://example.com/subtle-forest-pattern.png');
+            background-repeat: repeat;
+            background-size: cover;
+            background-blend-mode: multiply;
+            color: #e8d4a2;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .hero {
+            padding: 40px 20px;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            color: #c4a46c;
+            text-shadow: 3px 3px 5px #000;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+
+        .hero .links {
+            margin-top: 20px;
+        }
+
+        .hero a {
+            color: #c4a46c;
+            text-decoration: none;
+            font-size: 1.2em;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        .hero a[href="#how-it-works"]::before {
+            content: "🧝 ";
+        }
+        .hero a[href="#elf-lore"]::before {
+            content: "🧝 ";
+        }
+        .hero a[href="#bestiary"]::before {
+            content: "🧝 ";
+        }
+
+        .hero a:hover {
+            color: #d4af37;
+        }
+
+        .generator {
+            margin: 30px 0;
+            padding: 20px;
+            background: #2e3e2e;
+            border: 2px solid #c4a46c;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .generator input {
+            font-size: 1.2em;
+            padding: 10px;
+            width: 300px;
+            margin: 10px;
+            border-radius: 10px;
+            border: 1px solid #444;
+        }
+
+        .generator button {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            background: #c4a46c;
+            color: #1e1a1a;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .generator button:hover {
+            background: #d4af37;
+        }
+
+        .loading-container {
+            display: none;
+            margin: 20px auto;
+        }
+
+        .loading-text {
+            color: #c4a46c;
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #1e2e1e;
+            border-top: 5px solid #c4a46c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ghost-showcase {
+            margin: 50px 0;
+        }
+
+        .ghost-showcase h2 {
+            color: #c4a46c;
+        }
+
+        .ghost {
+            display: inline-block;
+            margin: 20px;
+            padding: 15px;
+            border: 2px solid #444;
+            border-radius: 10px;
+            background: #333;
+            color: #c4a46c;
+            text-align: left;
+            font-size: 1em;
+            white-space: pre;
+            overflow-x: auto;
+            position: relative;
+            width: 300px;
+        }
+
+        .ghost p {
+            margin: 5px 0;
+        }
+
+        .download-btn, .share-btn {
+            margin-top: 10px;
+            font-size: 1em;
+            padding: 8px 16px;
+            background: #c4a46c;
+            color: #1e1a1a;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: inline-block;
+            margin-right: 10px;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover, .share-btn:hover {
+            background: #d4af37;
+        }
+
+        .share-btn {
+            background: #1DA1F2; /* Twitter Blue */
+            color: #fff;
+        }
+
+        .share-btn:hover {
+            background: #40a9f3;
+        }
+
+        .info-section {
+            max-width: 800px;
+            margin: 50px auto;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .info-section h2 {
+            text-align: center;
+            color: #c4a46c;
+            margin-bottom: 20px;
+        }
+
+        #elf-lore h2::before {
+            content: "🧝 ";
+        }
+
+        .info-section h3 {
+            color: #c4a46c;
+            margin-top: 30px;
+        }
+
+        .info-section p {
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .info-section ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-section ol li::before {
+            content: "🧝 ";
+            margin-right: 5px;
+        }
+
+        .lore-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .lore-item {
+            background: #444;
+            padding: 15px;
+            border-radius: 10px;
+            color: #f0dbc3;
+        }
+
+        .lore-item h4 {
+            margin-top: 0;
+            color: #c4a46c;
+        }
+
+        .hint {
+            font-style: italic;
+            color: #d4af37;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #bestiary .bestiary-entry {
+            background: #444;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        #bestiary .bestiary-entry h4 {
+            margin: 5px 0;
+            color: #c4a46c;
+        }
+
+        footer {
+            padding: 20px 0;
+            background: #0f1a0f;
+            color: #888;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .ghost {
+                width: 90%;
+            }
+
+            .generator input {
+                width: 80%;
+            }
+
+            .lore-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Adopt an Elf</h1>
+        <p>Enter your Solana wallet address and an optional quest phrase to discover your elven companion!</p>
+        <div class="links">
+            <a href="#how-it-works">How It Works</a>
+            <a href="#elf-lore">Elf Lore & Myths</a>
+            <a href="#bestiary">Elven Bestiary</a>
+        </div>
+    </div>
+
+    <div class="generator">
+        <label for="wallet-address" style="display:none;">Wallet Address</label>
+        <input type="text" id="wallet-address" placeholder="Enter your Solana wallet address...">
+        <input type="text" id="quest-phrase" placeholder="Enter a quest phrase (optional)...">
+        <button id="generate-button">Summon My Elf</button>
+    </div>
+
+    <div class="loading-container" id="loading-container">
+        <div class="spinner"></div>
+        <p class="loading-text">Calling Upon the Ancient Woods...</p>
+    </div>
+
+    <div class="ghost-showcase" id="ghost-showcase">
+        <h2>Your Elven Companion</h2>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="info-section" id="how-it-works">
+        <h2>How It Works</h2>
+        <p>Each elf is uniquely determined by your wallet address and, if provided, a secret “quest phrase.” Here’s the process:</p>
+        <ol>
+            <li><strong>Wallet Address Input:</strong> Enter your Solana wallet address.</li>
+            <li><strong>Quest Phrase (Optional):</strong> Add a phrase to influence rare outcomes.</li>
+            <li><strong>Hashing Process:</strong> We transform these inputs into numbers, using them to assign your elf’s attributes.</li>
+            <li><strong>Deterministic Results:</strong> The same inputs yield the same elf, ensuring uniqueness and rarity.</li>
+        </ol>
+        <p>Try different addresses and quest phrases to discover new and rare elves!</p>
+    </div>
+
+    <!-- Elf Lore & Myths Section -->
+    <div class="info-section" id="elf-lore">
+        <h2>Elf Lore & Myths</h2>
+        <p>In ancient groves, moonlit glens, and mist-veiled valleys, elves live in harmony with leaf and bough. Each elf emerges from whispering winds and eternal roots, taking on gentle hues, subtle forms, and mystical auras as unique as the songs they carry.</p>
+
+        <p>Some elves sing softly under silver moonlight, others guard sacred groves, and some guide weary travelers under rustling leaves. Their personalities are as diverse as the forests they inhabit. Below are known elf lineages, each a melody in the great woodland chorus:</p>
+
+        <div class="lore-grid">
+            <div class="lore-item">
+                <h4>Whisper Glen Elf</h4>
+                <p>Soft-spoken, gentle keepers of hidden clearings, blending into mossy dells beneath ancient oaks.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Frost Grove Elf</h4>
+                <p>Serene spirits of wintry forests, drifting silently through snow-kissed pines and icy streams.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Storm Vale Elf</h4>
+                <p>Vibrant and dynamic, thriving under thunderheads, dancing where rain and wind entwine.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Mosswood Elf</h4>
+                <p>Rooted in old forests, nurturing life and spirit, whispering tales in emerald glades.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Umbral Hollow Elf</h4>
+                <p>Quiet guardians of shaded groves, moving in half-light, holding secrets in twilight silence.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Ethereal Elder Elf</h4>
+                <p>Wise and ancient, luminous under starlight. Philosophical keepers of forest lore and memory.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Crystal Spring Elf</h4>
+                <p>Reflective spirits of clear waters, curious and shimmering near streams and crystalline pools.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Dusk Bloom Elf</h4>
+                <p>Appearing at twilight’s bloom, graceful and elusive, weaving dreams in twilight gardens.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Moon Whisper Elf</h4>
+                <p>Bathed in moonlight, singing gentle lullabies. Mystical, guiding travelers by lunar glow.</p>
+            </div>
+            <div class="lore-item">
+                <h4>Ashen Oak Elf</h4>
+                <p>Dwellers of old charred groves, resilient and loyal, reborn where ancient trees once stood.</p>
+            </div>
+        </div>
+
+        <h3>Rarity and Collectibility</h3>
+        <p>Among these elves are rare aura hues, special accessories, or unique seasonal songs. Some appear only under special “quest phrases” or certain numerical coincidences. Keep experimenting to discover legendary rarities!</p>
+    </div>
+
+    <p class="hint">Psst... Certain “quest phrases” whispered at the right time can unveil rare elves unseen by ordinary means!</p>
+
+    <!-- Bestiary Section -->
+    <div class="info-section" id="bestiary">
+        <h2>Your Elven Bestiary</h2>
+        <p>As you summon new elves, their lineages will be recorded here. Return often, try new addresses and phrases, and watch your bestiary grow!</p>
+        <div id="bestiary-entries"></div>
+    </div>
+
+    <footer>
+        © 2024 Adopt an Elf | Whispers of the Woodland
+    </footer>
+
+    <script>
+    (function() {
+        // DOM Elements
+        const walletInput = document.getElementById('wallet-address');
+        const questInput = document.getElementById('quest-phrase');
+        const generateButton = document.getElementById('generate-button');
+        const ghostShowcase = document.getElementById('ghost-showcase');
+        const loadingContainer = document.getElementById('loading-container');
+        const bestiaryEntries = document.getElementById('bestiary-entries');
+
+        // Elf Configuration
+        const ELF_TYPES = [
+            {
+                type: 'Whisper Glen Elf',
+                traits: ['Gentle', 'Elusive', 'Soft-Spoken'],
+                art: `
+   /|\\
+  ( . )
+   \\|/
+ [Whisp]
+                `
+            },
+            {
+                type: 'Frost Grove Elf',
+                traits: ['Serene', 'Calm', 'Tranquil'],
+                art: `
+   /|\\
+  ( o )
+   \\|/
+ [Frost]
+                `
+            },
+            {
+                type: 'Storm Vale Elf',
+                traits: ['Dynamic', 'Vibrant', 'Unpredictable'],
+                art: `
+   /|\\
+  ( O )
+   \\|/
+ [Storm]
+                `
+            },
+            {
+                type: 'Mosswood Elf',
+                traits: ['Nurturing', 'Earthy', 'Greenish'],
+                art: `
+   /|\\
+  ( ^ )
+   \\|/
+ [Moss]
+                `
+            },
+            {
+                type: 'Umbral Hollow Elf',
+                traits: ['Silent', 'Secretive', 'Shadowy'],
+                art: `
+   /|\\
+  ( - )
+   \\|/
+ [Umbral]
+                `
+            },
+            {
+                type: 'Ethereal Elder Elf',
+                traits: ['Wise', 'Ancient', 'Cosmic'],
+                art: `
+   /|\\
+  ( * )
+   \\|/
+ [Elder]
+                `
+            },
+            {
+                type: 'Crystal Spring Elf',
+                traits: ['Curious', 'Reflective', 'Shimmering'],
+                art: `
+   /|\\
+  ( o )
+   \\|/
+[Crystal]
+                `
+            },
+            {
+                type: 'Dusk Bloom Elf',
+                traits: ['Graceful', 'Nocturnal', 'Elusive'],
+                art: `
+   /|\\
+  ( . )
+   \\|/
+ [Dusk]
+                `
+            },
+            {
+                type: 'Moon Whisper Elf',
+                traits: ['Dreamy', 'Mystical', 'Lulling'],
+                art: `
+   /|\\
+  ( * )
+   \\|/
+ [Moon]
+                `
+            },
+            {
+                type: 'Ashen Oak Elf',
+                traits: ['Steadfast', 'Loyal', 'Resilient'],
+                art: `
+   /|\\
+  ( o )
+   \\|/
+ [Ashen]
+                `
+            }
+        ];
+
+        // Rare Elf
+        const RARE_ELF = {
+            type: 'Starfell Elf',
+            traits: ['Ethereal', 'Mysterious', 'Rare'],
+            art: `
+   /|\\
+  ( ☆ )
+   \\|/
+[Starfell]
+            `
+        };
+
+        const AURAS = ['Emerald-Green', 'Moonlit-Silver', 'Autumn-Red', 'Willow-Gold', 'Dewy-Blue', 'Rose-Quartz', 'Sapphire-Shine', 'Fey-Purple', 'Sunset-Orange', 'Mist-Grey'];
+        const ACCESSORIES = ['Leaf Crown', 'Crystal Blossom', 'Runic Amulet', 'Moon Pendant', 'Druidic Staff', 'Ancient Bow', 'Silver Flute', 'Gleaming Dagger', 'Oak Charm', 'Mossy Cape'];
+
+        function validateWalletAddress(address) {
+            const solanaAddressRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+            return solanaAddressRegex.test(address);
+        }
+
+        function hashAddress(address) {
+            let hash = 0;
+            for (let i = 0; i < address.length; i++) {
+                const char = address.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32-bit integer
+            }
+            return Math.abs(hash);
+        }
+
+        function generateElf(walletHash, questHash) {
+            const combinedHash = (walletHash + questHash * 13) % 10000;
+
+            let elf;
+            if (combinedHash % 777 === 0) {
+                elf = RARE_ELF;
+            } else {
+                const typeIndex = walletHash % ELF_TYPES.length;
+                elf = ELF_TYPES[typeIndex];
+            }
+
+            const auraIndex = (walletHash >> 2) % AURAS.length;
+            const accessoryIndex = (walletHash >> 4) % ACCESSORIES.length;
+            const graceLevel = (walletHash % 100) + 1;
+            const chosenTrait = elf.traits[walletHash % elf.traits.length];
+
+            return {
+                type: elf.type,
+                aura: AURAS[auraIndex],
+                accessory: ACCESSORIES[accessoryIndex],
+                trait: chosenTrait,
+                graceLevel: graceLevel,
+                asciiArt: elf.art
+            };
+        }
+
+        function showLoading() {
+            loadingContainer.style.display = 'block';
+            ghostShowcase.innerHTML = '<h2>Your Elven Companion</h2>';
+        }
+
+        function hideLoading() {
+            loadingContainer.style.display = 'none';
+        }
+
+        function displayElf(elf) {
+            const elfCard = document.createElement('div');
+            elfCard.className = 'ghost';
+            elfCard.innerHTML = `
+${elf.asciiArt}
+<p><strong>Lineage:</strong> ${elf.type}</p>
+<p><strong>Aura:</strong> ${elf.aura}</p>
+<p><strong>Trait:</strong> ${elf.trait}</p>
+<p><strong>Accessory:</strong> ${elf.accessory}</p>
+<p><strong>Grace Level:</strong> ${elf.graceLevel}/100</p>
+            `;
+
+            const downloadButton = document.createElement('button');
+            downloadButton.className = 'download-btn';
+            downloadButton.textContent = 'Download Your Elf';
+            downloadButton.addEventListener('click', () => downloadElf(elf));
+
+            const shareButton = document.createElement('button');
+            shareButton.className = 'share-btn';
+            shareButton.textContent = 'Share on X';
+            shareButton.addEventListener('click', () => shareOnX(elf));
+
+            elfCard.appendChild(downloadButton);
+            elfCard.appendChild(shareButton);
+            ghostShowcase.appendChild(elfCard);
+
+            addElfToBestiary(elf);
+        }
+
+        function downloadElf(elf) {
+            const elfDetails = `
+Elven Companion Details:
+------------------------
+Lineage: ${elf.type}
+Aura: ${elf.aura}
+Trait: ${elf.trait}
+Accessory: ${elf.accessory}
+Grace Level: ${elf.graceLevel}/100
+
+Ascii Art:
+${elf.asciiArt}
+            `;
+
+            const blob = new Blob([elfDetails], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${elf.type.replace(/\s+/g, '_')}_Elf.txt`;
+            link.click();
+        }
+
+        function shareOnX(elf) {
+            const elfDetails = `I just summoned an elven companion! 🧝✨
+
+Lineage: ${elf.type}
+Aura: ${elf.aura}
+Trait: ${elf.trait}
+Accessory: ${elf.accessory}
+Grace Level: ${elf.graceLevel}/100
+
+Discover your own at #AdoptAnElf #EnchantedWoods
+`;
+            const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(elfDetails)}`;
+            window.open(tweetUrl, '_blank');
+        }
+
+        function addElfToBestiary(elf) {
+            const bestiaryData = JSON.parse(localStorage.getItem('bestiary')) || [];
+            if (!bestiaryData.includes(elf.type)) {
+                bestiaryData.push(elf.type);
+                localStorage.setItem('bestiary', JSON.stringify(bestiaryData));
+                updateBestiaryDisplay(bestiaryData);
+            }
+        }
+
+        function updateBestiaryDisplay(bestiaryData) {
+            bestiaryEntries.innerHTML = '';
+            bestiaryData.forEach(type => {
+                const entry = document.createElement('div');
+                entry.className = 'bestiary-entry';
+                entry.innerHTML = `<h4>${type}</h4><p>This lineage has been encountered and recorded in your growing lore archive.</p>`;
+                bestiaryEntries.appendChild(entry);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const bestiaryData = JSON.parse(localStorage.getItem('bestiary')) || [];
+            updateBestiaryDisplay(bestiaryData);
+        });
+
+        generateButton.addEventListener('click', () => {
+            const walletAddress = walletInput.value.trim();
+            const questPhrase = questInput.value.trim();
+
+            if (!validateWalletAddress(walletAddress)) {
+                alert('Please enter a valid Solana wallet address!');
+                return;
+            }
+
+            showLoading();
+
+            setTimeout(() => {
+                const walletHash = hashAddress(walletAddress);
+                const questHash = hashAddress(questPhrase);
+                const elf = generateElf(walletHash, questHash);
+
+                hideLoading();
+                displayElf(elf);
+            }, 2000);
+        });
+    })();
+    </script>
+</body>
+</html>
